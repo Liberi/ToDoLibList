@@ -6,8 +6,6 @@ import {
 	TouchableOpacity,
 	TextInput,
 	ScrollView,
-	Alert,
-	ActivityIndicator,
 } from 'react-native';
 
 import stylesWelcome from './styles';
@@ -21,7 +19,7 @@ import Validations from '../../utils/Validations';
 import ValidationIsNull from '../../utils/Validations/validationIsNull';
 import EmailValidation from '../../utils/Validations/emailValidation';
 import PasswordsValidation from '../../utils/Validations/passwordsValidation';
-import SetDataUser from '../../utils/Validations/AsyncStorage/SetDataUser';
+import SetData from '../../utils/Validations/AsyncStorage/SetData';
 
 export default function SignUpScreen({ navigation }) {
 	const [errMessage, setErrMessage] = useState({ text: '', anim: 'fadeOut' });
@@ -69,7 +67,7 @@ export default function SignUpScreen({ navigation }) {
 			viewMessage('Успешно!', 5000);
 			setIsLoad(true);
 			setActive(false);
-			SetDataUser(email.current.value, {
+			SetData(email.current.value, {
 				fullName: fullName.current.value,
 				password: password.current.value,
 			}).then(() => {

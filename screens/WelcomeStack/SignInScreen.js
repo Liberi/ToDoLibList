@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import {
 	View,
 	Text,
-	Button,
 	StyleSheet,
 	TouchableOpacity,
 	Alert,
@@ -19,7 +18,7 @@ import TextFadeAnim from '../../components/TextErrors/TextFadeAnim';
 
 import ValidationIsNull from '../../utils/Validations/validationIsNull';
 import EmailValidation from '../../utils/Validations/emailValidation';
-import GetDataUser from '../../utils/Validations/AsyncStorage/GetDataUser';
+import GetData from '../../utils/Validations/AsyncStorage/GetData';
 
 import SignInImg from '../../assets/back/signInImg.svg';
 
@@ -64,24 +63,37 @@ export default function SignInScreen({ navigation }) {
 		}, timeout);
 	}
 
-	function SignIn() {
-		if (!isValidation()) return; 
-		
+	function SignIn(isFogotPassword = false) {
+		if (!isValidation()) return;
+
 		setIsLoad(true);
-		GetDataUser(email.current.value).then(dataJson => {
-			dataObg = JSON.parse(dataJson);
-			if(dataObg.password === password.current.value ){
-				setActive(false);
-				viewMessage('Успешно!', 5000);
-			}else{
-				viewMessage('Неверный пароль!', 3000);
+		GetData(email.current.value)
+			.then(dataJson => {
+				dataObg = JSON.parse(dataJson);
+				if (!isFogotPassword) {
+					if (dataObg.password === password.current.value) {
+						setActive(false);
+						viewMessage('Успешно!', 5000);
+					} else {
+						viewMessage('Неверный пароль!', 3000);
+						// setActive(true);
+					}
+				} else {
+					viewMessage(
+						`Успешно, ваш пароль: ${dataObg.password}`,
+						10000,
+					);
+				}
+			})
+			.catch(error => {
+				console.log(
+					'Ошибка при получении данных:',
+					error,
+					password.current.value,
+				);
+				viewMessage('Данные не найдены!', 3000);
 				// setActive(true);
-			}
-		}).catch(error => {
-			console.log('Ошибка при получении данных:', error, password.current.value);
-			viewMessage('Данные не найдены!', 3000);
-			// setActive(true);
-		})
+			});
 		setIsLoad(false);
 	}
 
@@ -101,7 +113,9 @@ export default function SignInScreen({ navigation }) {
 					<TextFadeAnim
 						text={errMessage.text}
 						textColor={
-							!errMessage.text.includes('Успешно') ? 'red' : 'green'
+							!errMessage.text.includes('Успешно')
+								? 'red'
+								: 'green'
 						}
 						anim={errMessage.anim}
 					/>
@@ -137,7 +151,9 @@ export default function SignInScreen({ navigation }) {
 						}}
 						// value={password.current.value}
 						editable={active}
-						onSubmitEditing={SignIn}
+						onSubmitEditing={() => {
+							SignIn();
+						}}
 						placeholder='Ваш пароль'
 						inputMode='text'
 						placeholderTextColor={'gray'}
@@ -146,10 +162,11 @@ export default function SignInScreen({ navigation }) {
 					/>
 					<Text
 						onPress={() => {
-							Alert.alert(
+							SignIn(true);
+							/* Alert.alert(
 								'Внимание',
 								'Действие пока не зарегестрировано!',
-							);
+							); */
 						}}
 						style={[stylesWelcome.btnElse, styles.btnElse]}
 					>
@@ -163,7 +180,9 @@ export default function SignInScreen({ navigation }) {
 					]}
 				>
 					<TouchableOpacity
-						onPress={SignIn}
+						onPress={() => {
+							SignIn();
+						}}
 						style={stylesWelcome.btnNext}
 					>
 						<Text style={stylesWelcome.btnText}>Войти</Text>

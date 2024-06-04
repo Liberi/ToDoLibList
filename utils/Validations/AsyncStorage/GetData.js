@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function GetDataUser(key) {
+function GetData(key) {
 	return new Promise((resolve, reject) => {
 		AsyncStorage.getItem(key)
 			.then(value => {
@@ -17,4 +17,4 @@ function GetDataUser(key) {
 	});
 }
 
-export default GetDataUser;
+export default GetData;
