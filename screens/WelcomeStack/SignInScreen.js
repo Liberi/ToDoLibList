@@ -62,7 +62,7 @@ export default function SignInScreen({ navigation }) {
 		setErrMessage({ text: textMessage, anim: 'fadeIn' });
 
 		if (timerMessage.current) clearTimeout(timerMessage.current);
-		setTimeout(() => {
+		timerMessage.current = setTimeout(() => {
 			setErrMessage({ text: textMessage, anim: 'fadeOut' });
 		}, timeout);
 	}
@@ -72,35 +72,33 @@ export default function SignInScreen({ navigation }) {
 
 		setIsLoad(true);
 		GetData(email.current.value)
-			.then(
-				dataJson => {
-					dataObg = JSON.parse(dataJson);
+			.then(dataJson => {
+				dataObg = JSON.parse(dataJson);
 
-					if (isFogotPassword) {
-						FogotPassword(dataObg.password);
-						return;
-					}
+				if (isFogotPassword) {
+					FogotPassword(dataObg.password);
+					return;
+				}
 
-					if (dataObg.password === password.current.value) {
-						SetData('USER_LOGIN_CHECK', {
-							fullName: dataObg.fullName,
-							email: email.current.value,
-							password: password.current.value,
-						}).then(() => {
-							setActive(false);
-							viewMessage('Успешно загружено!', 5000);
+				if (dataObg.password === password.current.value) {
+					SetData('USER_LOGIN_CHECK', {
+						fullName: dataObg.fullName,
+						email: email.current.value,
+						password: password.current.value,
+					}).then(() => {
+						setActive(false);
+						viewMessage('Успешно загружено!', 5000);
 
-							setTimeout(() => {
-								setIsLoad(false);
-								/* ---------Переходо на другую страницу (вероятно роутер)--------- */
-							}, 2000);
-						});
-					} else {
-						viewMessage('Неверный пароль!', 3000);
-						setIsLoad(false);
-					}
-				},
-			)
+						setTimeout(() => {
+							setIsLoad(false);
+							/* ---------Переходо на другую страницу (вероятно роутер)--------- */
+						}, 2000);
+					});
+				} else {
+					viewMessage('Неверный пароль!', 3000);
+					setIsLoad(false);
+				}
+			})
 			.catch(err => {
 				console.log('Ошибка при получении данных:', err);
 				viewMessage('Данные не найдены!', 3000);
