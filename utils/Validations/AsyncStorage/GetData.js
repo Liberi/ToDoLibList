@@ -7,7 +7,7 @@ function GetData(key) {
 				if (value !== null) {
 					resolve(value);
 				} else {
-					resolve(null);
+					reject(new Error('Данные были пустыми!'));
 				}
 			})
 			.catch(error => {

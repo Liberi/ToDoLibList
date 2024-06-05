@@ -26,6 +26,7 @@ export default function SignUpScreen({ navigation }) {
 	const [active, setActive] = useState(true);
 	const [isLoad, setIsLoad] = useState(false);
 
+	const timerMessage = useRef(null);
 	const fullName = useRef({
 		value: '',
 		fieldName: 'Имя',
@@ -64,38 +65,53 @@ export default function SignUpScreen({ navigation }) {
 			if (!passwordValid.isValidation) {
 				throw passwordValid.messErr;
 			}
-			viewMessage('Успешно!', 5000);
-			setIsLoad(true);
-			setActive(false);
+		} catch (e) {
+			viewMessage(e.message, 3000);
+			return;
+		}
+
+		setIsLoad(true);
+		setActive(false);
+		try {
 			SetData(email.current.value, {
 				fullName: fullName.current.value,
 				password: password.current.value,
-			}).then(() => {
-				viewMessage('Успешно загружено!', 5000);
-				setIsLoad(false);
-			}).catch(err => {
-				viewMessage('Ошибка загрузки!', 3000);
-				console.log(err);
-			})
-		} catch (e) {
-			viewMessage(e.message, 3000);
+			});
+			SetData('USER_LOGIN_CHECK', {
+				fullName: fullName.current.value,
+				email: email.current.value,
+				password: password.current.value,
+			});
+		} catch (error) {
+			console.log(error);
+			viewMessage('Ошибка загрузки!', 3000);
+			setIsLoad(false);
+			setActive(true);
+			return;
 		}
+		viewMessage('Успешно загружено!', 5000);
+
+		setTimeout(() => {
+			setIsLoad(false);
+			/* ---------Переходо на другую страницу (вероятно роутер)--------- */
+		}, 2000);
 	}
 
 	function viewMessage(textMessage, timeout) {
 		setErrMessage({ text: textMessage, anim: 'fadeIn' });
-		setTimeout(() => {
+
+		if (timerMessage.current) clearTimeout(timerMessage.current);
+		timerMessage.current = setTimeout(() => {
 			setErrMessage({ text: textMessage, anim: 'fadeOut' });
 		}, timeout);
 	}
 
 	return (
-		<ScrollView /* style={{ borderWidth: 3, borderColor: 'green' }} */>
+		<ScrollView>
 			<View
 				style={[
 					stylesWelcome.mainContainerWelcome,
 					stylesWelcome.mainFlex,
-					// { borderWidth: 3, borderColor: 'green' },
 				]}
 			>
 				{isLoad && <ActivityIndicatorApp />}
@@ -204,16 +220,16 @@ export default function SignUpScreen({ navigation }) {
 					]}
 				>
 					<TouchableOpacity
-						// disabled={!active}
+						disabled={!active}
 						onPress={Validation}
 						style={stylesWelcome.btnNext}
 					>
 						<Text
-							/* style={[
+							style={[
 								stylesWelcome.btnText,
 								!active ? stylesWelcome.textNoActive : null,
-							]} */
-							style={stylesWelcome.btnText}
+							]}
+							// style={stylesWelcome.btnText}
 						>
 							Зарегестрироваться
 						</Text>

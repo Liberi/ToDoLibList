@@ -19,6 +19,7 @@ import TextFadeAnim from '../../components/TextErrors/TextFadeAnim';
 import ValidationIsNull from '../../utils/Validations/validationIsNull';
 import EmailValidation from '../../utils/Validations/emailValidation';
 import GetData from '../../utils/Validations/AsyncStorage/GetData';
+import SetData from '../../utils/Validations/AsyncStorage/SetData';
 
 import SignInImg from '../../assets/back/signInImg.svg';
 
@@ -27,6 +28,7 @@ export default function SignInScreen({ navigation }) {
 	const [active, setActive] = useState(true);
 	const [isLoad, setIsLoad] = useState(false);
 
+	const timerMessage = useRef(null);
 	const email = useRef({
 		value: '',
 		fieldName: 'Почта',
@@ -58,6 +60,8 @@ export default function SignInScreen({ navigation }) {
 
 	function viewMessage(textMessage, timeout) {
 		setErrMessage({ text: textMessage, anim: 'fadeIn' });
+
+		if (timerMessage.current) clearTimeout(timerMessage.current);
 		setTimeout(() => {
 			setErrMessage({ text: textMessage, anim: 'fadeOut' });
 		}, timeout);
@@ -68,33 +72,46 @@ export default function SignInScreen({ navigation }) {
 
 		setIsLoad(true);
 		GetData(email.current.value)
-			.then(dataJson => {
-				dataObg = JSON.parse(dataJson);
-				if (!isFogotPassword) {
+			.then(
+				dataJson => {
+					dataObg = JSON.parse(dataJson);
+
+					if (isFogotPassword) {
+						FogotPassword(dataObg.password);
+						return;
+					}
+
 					if (dataObg.password === password.current.value) {
-						setActive(false);
-						viewMessage('Успешно!', 5000);
+						SetData('USER_LOGIN_CHECK', {
+							fullName: dataObg.fullName,
+							email: email.current.value,
+							password: password.current.value,
+						}).then(() => {
+							setActive(false);
+							viewMessage('Успешно загружено!', 5000);
+
+							setTimeout(() => {
+								setIsLoad(false);
+								/* ---------Переходо на другую страницу (вероятно роутер)--------- */
+							}, 2000);
+						});
 					} else {
 						viewMessage('Неверный пароль!', 3000);
-						// setActive(true);
+						setIsLoad(false);
 					}
-				} else {
-					viewMessage(
-						`Успешно, ваш пароль: ${dataObg.password}`,
-						10000,
-					);
-				}
-			})
-			.catch(error => {
-				console.log(
-					'Ошибка при получении данных:',
-					error,
-					password.current.value,
-				);
+				},
+			)
+			.catch(err => {
+				console.log('Ошибка при получении данных:', err);
 				viewMessage('Данные не найдены!', 3000);
-				// setActive(true);
+				setIsLoad(false);
 			});
+	}
+
+	function FogotPassword(password) {
+		viewMessage(`Успешно, ваш пароль: ${password}`, 10000);
 		setIsLoad(false);
+		setActive(true);
 	}
 
 	return (
@@ -163,10 +180,6 @@ export default function SignInScreen({ navigation }) {
 					<Text
 						onPress={() => {
 							SignIn(true);
-							/* Alert.alert(
-								'Внимание',
-								'Действие пока не зарегестрировано!',
-							); */
 						}}
 						style={[stylesWelcome.btnElse, styles.btnElse]}
 					>
@@ -180,12 +193,21 @@ export default function SignInScreen({ navigation }) {
 					]}
 				>
 					<TouchableOpacity
+						disabled={!active}
 						onPress={() => {
 							SignIn();
 						}}
 						style={stylesWelcome.btnNext}
 					>
-						<Text style={stylesWelcome.btnText}>Войти</Text>
+						<Text
+							style={[
+								stylesWelcome.btnText,
+								!active ? stylesWelcome.textNoActive : null,
+							]}
+							// style={stylesWelcome.btnText}
+						>
+							Войти
+						</Text>
 					</TouchableOpacity>
 					<View style={[styles.containerElseText, glogalStyles.flex]}>
 						<Text style={stylesWelcome.titleElseText}>
