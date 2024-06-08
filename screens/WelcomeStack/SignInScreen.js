@@ -18,8 +18,8 @@ import TextFadeAnim from '../../components/TextErrors/TextFadeAnim';
 
 import ValidationIsNull from '../../utils/Validations/validationIsNull';
 import EmailValidation from '../../utils/Validations/emailValidation';
-import GetData from '../../utils/Validations/AsyncStorage/GetData';
-import SetData from '../../utils/Validations/AsyncStorage/SetData';
+import GetData from '../../utils/AsyncStorage/GetData';
+import SetData from '../../utils/AsyncStorage/SetData';
 
 import SignInImg from '../../assets/back/signInImg.svg';
 

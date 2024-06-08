@@ -19,7 +19,7 @@ import Validations from '../../utils/Validations';
 import ValidationIsNull from '../../utils/Validations/validationIsNull';
 import EmailValidation from '../../utils/Validations/emailValidation';
 import PasswordsValidation from '../../utils/Validations/passwordsValidation';
-import SetData from '../../utils/Validations/AsyncStorage/SetData';
+import SetData from '../../utils/AsyncStorage/SetData';
 
 export default function SignUpScreen({ navigation }) {
 	const [errMessage, setErrMessage] = useState({ text: '', anim: 'fadeOut' });
