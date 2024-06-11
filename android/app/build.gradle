@@ -80,7 +80,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.6-alpha"
     }
     signingConfigs {
         debug {
@@ -102,6 +102,16 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    
+    applicationVariants.all { variant ->
+     if (variant.buildType.name == 'release') {
+            variant.outputs.each { output ->
+                def outputFileName = "${rootProject.name}-v${variant.versionName}-${variant.versionCode}-release.apk"
+                output.outputFileName = outputFileName
+           }
+        }
+    }
+
 }
 
 dependencies {
