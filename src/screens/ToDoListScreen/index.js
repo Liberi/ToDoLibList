@@ -14,24 +14,20 @@ import { observer } from 'mobx-react-lite';
 
 export default observer(function ToDoListScreen() {
 	const [useData, setUserData] = useState(null);
-	const [imageUrl, setImageUrl] = useState(null);
+	const [gifData, setGifData] = useState(null);
 
 	useEffect(() => {
 		setUserData(UserData.getUserData());
 
 		const fetchRandomImage = async () => {
-			setImageUrl(null);
+			setGifData(null);
 			let getUrl = `https://api.giphy.com/v1/gifs/random?api_key=${GIPHY_API_KEY}&tag=funny`;
 			try {
 				const response = await axios.get(getUrl);
-				setImageUrl(
-					response.data.data.images.original.url.split('?')[0],
-				);
-/* 				console.log('Получено изо: ');
-				console.log(imageUrl);
-				console.log(
-					response.data.data.images.original.url.split('?')[0],
-				); */
+				setGifData({
+					url: response.data.data.images.original.url.split('?')[0],
+					title: response.data.data.title,
+				});
 			} catch (error) {
 				console.log(
 					'Ошибка при получении случайного изображения:',
@@ -40,39 +36,51 @@ export default observer(function ToDoListScreen() {
 			}
 		};
 		fetchRandomImage();
-		// console.log('url2', imageUrl);
 	}, []);
 
 	return (
 		<View style={styles.mainContainer}>
 			<View style={styles.hederContainer}>
-				<IconHeder
-					width={240}
-					height={170}
-					style={styles.decorateHederImg}
-					color={'#fff'}
-				/>
+				<IconHeder style={styles.decorateHederImg} color={'#fff'} />
 				<View
 					style={[
 						styles.containerUserImg,
-						!!imageUrl || styles.loadingImage,
+						!!gifData || styles.loadingImage,
 					]}
 				>
-					{imageUrl ? (
+					{!!gifData && (
 						<FastImage
 							style={styles.UserImg}
 							source={{
-								uri: imageUrl ,
+								uri: gifData.url,
 								priority: FastImage.priority.high,
 							}}
 							resizeMode={FastImage.resizeMode.cover}
 						/>
-					) : (
-						<LoadingIcon />
 					)}
+					<LoadingIcon altStyle={styles.loadingIcon} />
 				</View>
-				<Text style={styles.HederText}>{`Приветствую ${useData?.fullName}!`}</Text>
+				<View style={styles.containerTextHeder}>
+					<Text style={styles.HederText}>
+						{`Приветствую ${useData?.fullName}!`}
+					</Text>
+					<Text style={styles.DescrptionText}>
+						{'Ваша Gif сегодня ⬆️'}
+					</Text>
+					<Text style={styles.DescrptionText}>
+						{`${
+							gifData?.title ? gifData?.title.slice(0, 50) : ''
+						}...`}
+					</Text>
+				</View>
 			</View>
+			<Text style={[styles.HederText, {margin: '20%'}]}>
+				{`Тут что-то намечается...\n
+				 ${useData?.fullName}
+				 ${useData?.email}
+				 ${useData?.password}
+				`}
+			</Text>
 		</View>
 	);
 });

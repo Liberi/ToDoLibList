@@ -5,22 +5,26 @@ import { colors } from '../../styles';
 export default StyleSheet.create({
 	mainContainer: {
 		flex: 1,
+		backgroundColor: colors.appBackGray,
 	},
 	hederContainer: {
 		padding: '10%',
-		height: '30%',
+		height: '35%',
 		backgroundColor: colors.appYellow,
 		alignItems: 'center',
-		// justifyContent: 'flex-end',
+		shadowColor: 'black',
+		elevation: 8,
 	},
 	decorateHederImg: {
+		width: '50%',
+		height: '40%',
 		position: 'absolute',
-		left: -40,
+		left: -20,
 	},
 	containerUserImg: {
-		marginTop: 50,
-		width: '30%',
-		height: '52%',
+		marginTop: '10%',
+		width: 90,
+		height: 90,
 		borderRadius: 50,
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -29,17 +33,34 @@ export default StyleSheet.create({
 		borderColor: 'white',
 	},
 	loadingImage: {
-		borderWidth: 2,
+		borderWidth: 3,
 	},
 	UserImg: {
+		position: 'absolute',
+		zIndex: 2,
 		borderRadius: 50,
 		width: '100%',
 		height: '100%',
 	},
+	loadingIcon:{
+		zIndex: 1,
+	},
+	containerTextHeder: {
+		marginTop: 15,
+		width: '100%',
+		alignItems: 'center',
+	},
 	HederText: {
-		marginTop: 20,
 		fontSize: 18,
-		// color: 'black',
+		color: 'black',
 		fontWeight: '500',
+	},
+	DescrptionText: {
+		marginTop: 5,
+		width: '100%',
+		fontSize: 14,
+		color: 'white',
+		fontWeight: '500',
+		textAlign: 'center',
 	},
 });

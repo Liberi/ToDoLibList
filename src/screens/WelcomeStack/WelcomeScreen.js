@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
 		width: '60%',
 		height: 190,
 		resizeMode: 'contain',
-		borderWidth: 3,
 		marginBottom: 20,
 	},
 	containerText: {

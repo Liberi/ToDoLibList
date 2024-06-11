@@ -8,8 +8,6 @@ export default function HederWelcome() {
 	return (
 		<View style={styles.container}>
 			<IconHeder
-				width={240}
-				height={170}
 				style={styles.decorateHederImg}
 				color={colors.appYellow}
 			/>
@@ -19,8 +17,10 @@ export default function HederWelcome() {
 
 const styles = StyleSheet.create({
 	decorateHederImg:{
+		width: '50%',
+		height: '40%',
 		position: 'absolute',
-		left: -40,
+		left: -10,
 	},
 	container: {
 		width: '100%',

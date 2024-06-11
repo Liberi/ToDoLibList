@@ -3,8 +3,9 @@ import * as Animatable from 'react-native-animatable';
 import React from 'react';
 
 import { Loading } from '../../assets/svg';
+import { colors } from '../../styles';
 
-const LoadingIcon = () => {
+const LoadingIcon = ({altStyle}) => {
 	return (
 		<Animatable.View
 			animation={{
@@ -20,11 +21,9 @@ const LoadingIcon = () => {
 			duration={1500}
 			easing='linear'
 			iterationCount='infinite'
-			style={styles.container}
+			style={[styles.container, altStyle]}
 		>
 			<Loading
-				// width={50}
-				// height={50}
 				style={styles.ImgLoad}
 			/>
 		</Animatable.View>
@@ -36,9 +35,9 @@ export default LoadingIcon;
 const styles = StyleSheet.create({
 	container: {
 		alignItems: 'center',
-		backgroundColor: '#FFFFFF95',
-		width: '80%',
-		height: '80%',
+		backgroundColor: colors.transparentWhite,
+		width: '70%',
+		height: '70%',
 		borderRadius: 50,
 	},
 	ImgLoad: {

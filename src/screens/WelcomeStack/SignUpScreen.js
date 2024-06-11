@@ -89,13 +89,9 @@ export default function SignUpScreen({ navigation }) {
 			setActive(true);
 			return;
 		}
-		viewMessage('Успешно загружено!', 5000);
-
-		setTimeout(() => {
-			setIsLoad(false);
-			UserData.setIsRegistration(true);
-			/* ---------Переходо на другую страницу (вероятно роутер)--------- */
-		}, 3000);
+		viewMessage('Успешно загружено!', 2500);
+		/* Переходо на другую страницу (задержка перехода идет от FirstEntryNavigator в 2с) */
+		UserData.setIsRegistration(true);
 	}
 
 	function viewMessage(textMessage, timeout) {
