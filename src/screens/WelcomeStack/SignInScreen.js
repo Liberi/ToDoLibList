@@ -188,7 +188,7 @@ export default function SignInScreen({ navigation }) {
 						onPress={() => {
 							SignIn();
 						}}
-						style={stylesWelcome.btnNext}
+						style={[stylesWelcome.btnNext, glogalStyles.shadow]}
 					>
 						<Text
 							style={[

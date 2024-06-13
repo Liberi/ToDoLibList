@@ -6,4 +6,8 @@ export default StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
+	shadow: {
+		shadowColor: 'black',
+		elevation: 8,
+	},
 });

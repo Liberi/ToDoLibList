@@ -25,8 +25,6 @@ export default StyleSheet.create({
 		borderRadius: 10,
 		alignItems: 'center',
 		justifyContent: 'center',
-		shadowColor: 'black',
-		elevation: 8,
 	},
 	textNoActive: {
 		color: 'gray',

@@ -219,7 +219,7 @@ export default function SignUpScreen({ navigation }) {
 					<TouchableOpacity
 						disabled={!active}
 						onPress={Validation}
-						style={stylesWelcome.btnNext}
+						style={[stylesWelcome.btnNext, glogalStyles.shadow]}
 					>
 						<Text
 							style={[

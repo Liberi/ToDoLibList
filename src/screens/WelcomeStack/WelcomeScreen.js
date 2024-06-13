@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 import stylesWelcome from './styles';
+import { glogalStyles } from '../../styles';
 import { HederWelcome } from '../../components';
 
 import { MainWelcomeImg } from '../../assets/back';
@@ -27,7 +28,7 @@ export default function WelcomeScreen({ navigation }) {
 				onPress={() => {
 					navigation.navigate('SignUpScreen');
 				}}
-				style={stylesWelcome.btnNext}
+				style={[stylesWelcome.btnNext, glogalStyles.shadow]}
 			>
 				<Text style={stylesWelcome.btnText}>Начать</Text>
 			</TouchableOpacity>

@@ -12,14 +12,19 @@ export default StyleSheet.create({
 		height: '35%',
 		backgroundColor: colors.appYellow,
 		alignItems: 'center',
-		shadowColor: 'black',
-		elevation: 8,
 	},
 	decorateHederImg: {
 		width: '50%',
 		height: '40%',
 		position: 'absolute',
 		left: -20,
+	},
+	logOutBtn: {
+		position: 'absolute',
+		top: '20%',
+		right: '8%',
+		width: 25,
+		height: 25,
 	},
 	containerUserImg: {
 		marginTop: '10%',
@@ -42,7 +47,7 @@ export default StyleSheet.create({
 		width: '100%',
 		height: '100%',
 	},
-	loadingIcon:{
+	loadingIcon: {
 		zIndex: 1,
 	},
 	containerTextHeder: {
@@ -62,5 +67,42 @@ export default StyleSheet.create({
 		color: 'white',
 		fontWeight: '500',
 		textAlign: 'center',
+	},
+	loginOutMenuBack: {
+		position: 'absolute',
+		zIndex: 3,
+		width: '100%',
+		height: '100%',
+		backgroundColor: colors.transparentWhite,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	loginOutMenuContainer: {
+		width: '70%',
+		height: '25%',
+		padding: '5%',
+		backgroundColor: colors.appYellow,
+		borderRadius: 10,
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+	loginOutTextAkkInfo: {
+		textAlign: 'center',
+		fontWeight: 'bold',
+	},
+	loginOutCheckbox: {
+		
+	},
+	loginOutBtn: {
+		width: '100%',
+		backgroundColor: colors.appBackGray,
+		borderRadius: 10,
+		alignItems: 'center',
+	},
+	loginOutBtnText: {
+		fontSize: 20,
+		padding: '3%',
+		fontWeight: 'bold',
+		color: 'black',
 	},
 });
