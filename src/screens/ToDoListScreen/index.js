@@ -1,25 +1,28 @@
 import { Button, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
+import CheckBox from '@react-native-community/checkbox';
 import FastImage from 'react-native-fast-image';
-import Checkbox from 'react-native-checkbox';
 import { observer } from 'mobx-react-lite';
 import axios from 'axios';
 
 import { GIPHY_API_KEY } from '@env';
 
 import styles from './styles';
-import { glogalStyles } from '../../styles';
+import { colors, glogalStyles } from '../../styles';
 import { IconHeder } from '../../assets/svg';
 import { LogOut } from '../../assets/svg';
 
 import { UserData } from '../../store';
-import { LoadingIcon } from '../../components';
+import { LoadingIcon, ActivityIndicatorApp } from '../../components';
+import { SetData, RemoveData } from '../../utils/AsyncStorage';
 
 export default observer(function ToDoListScreen() {
 	const [isLoginOutMenu, setIsLoginOutMenu] = useState(null);
 	const [useData, setUserData] = useState(null);
 	const [gifData, setGifData] = useState(null);
-	const isChecked = useRef(false);
+	const [isChecked, setIsChecked] = useState(false);
+	const [isLoad, setIsLoad] = useState(false);
+	const [isDisableDialog, setIsDisableDialog] = useState(false);
 
 	useEffect(() => {
 		setUserData(UserData.getUserData());
@@ -59,6 +62,38 @@ export default observer(function ToDoListScreen() {
 		return gifTitle;
 	}
 
+	function updateDataLoginOut(isDeteteAkk) {
+		setIsLoad(true);
+		setIsDisableDialog(true);
+		if (isDeteteAkk) {
+			try {
+				RemoveData(useData.email).then(() => {
+					RemoveData('USER_LOGIN_CHECK').then(() => {
+						/* Переходо на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
+						UserData.setUserData(null);
+						UserData.setIsRegistration(false);
+					});
+				});
+			} catch (error) {
+				console.log('Прехвачена ошибка при удалении данных:', error);
+				setIsLoad(false);
+				setIsDisableDialog(false);
+			}
+		} else {
+			let newUserData = {
+				fullName: useData.fullName,
+				email: useData.email,
+				password: useData.password,
+				isLoggedIn: false,
+			};
+			SetData('USER_LOGIN_CHECK', newUserData).then(() => {
+				/* Переходо на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
+				UserData.setUserData(newUserData);
+				UserData.setIsRegistration(false);
+			});
+		}
+	}
+
 	function LoginOutMenu() {
 		return (
 			<View style={styles.loginOutMenuBack}>
@@ -68,25 +103,71 @@ export default observer(function ToDoListScreen() {
 					<Text
 						style={styles.loginOutTextAkkInfo}
 					>{`Вы выходите из аккаунта\n${useData?.email}`}</Text>
-					<Checkbox
-						label='Удалить аккаунт'
-						checked={isChecked.current}
-						onChange={checked => (isChecked.current = checked)}
-						styles={styles.loginOutCheckbox}
-					/>
+					<View style={styles.loginOutCheckboxContainer}>
+						<CheckBox
+							disabled={isDisableDialog}
+							value={isChecked}
+							onValueChange={checked => setIsChecked(checked)}
+							tintColors={{
+								true: isDisableDialog
+									? 'gray'
+									: colors.appBackGray,
+								false: isDisableDialog
+									? 'gray'
+									: colors.appBackGray,
+							}}
+						/>
+						<Text
+							onPress={() => {
+								setIsChecked(!isChecked);
+							}}
+							style={[
+								styles.loginOutCheckboxText,
+								isDisableDialog
+									? styles.loginOutTextNoActive
+									: null,
+							]}
+						>
+							Удалить аккаунт
+						</Text>
+					</View>
 					<TouchableOpacity
-						onPress={() => {}}
+						disabled={isDisableDialog}
+						onPress={() => {
+							updateDataLoginOut(isChecked);
+						}}
+						activeOpacity={0.5}
 						style={[styles.loginOutBtn, glogalStyles.shadow]}
 					>
-						<Text style={styles.loginOutBtnText}>Выйти</Text>
+						<Text
+							style={[
+								styles.loginOutBtnText,
+								isDisableDialog
+									? styles.loginOutTextNoActive
+									: null,
+							]}
+						>
+							Выйти
+						</Text>
 					</TouchableOpacity>
 					<TouchableOpacity
+						disabled={isDisableDialog}
 						onPress={() => {
 							setIsLoginOutMenu(false);
 						}}
+						activeOpacity={0.5}
 						style={[styles.loginOutBtn, glogalStyles.shadow]}
 					>
-						<Text style={styles.loginOutBtnText}>Отменить</Text>
+						<Text
+							style={[
+								styles.loginOutBtnText,
+								isDisableDialog
+									? styles.loginOutTextNoActive
+									: null,
+							]}
+						>
+							Отменить
+						</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -95,6 +176,7 @@ export default observer(function ToDoListScreen() {
 
 	return (
 		<View style={styles.mainContainer}>
+			<ActivityIndicatorApp isActive={isLoad} colorReverse={true} />
 			{!isLoginOutMenu || LoginOutMenu()}
 			<View style={[styles.hederContainer, glogalStyles.shadow]}>
 				<IconHeder style={styles.decorateHederImg} color={'#fff'} />

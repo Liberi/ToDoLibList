@@ -54,15 +54,6 @@ export default function SignInScreen({ navigation }) {
 		}
 	}
 
-	function viewMessage(textMessage, timeout) {
-		setErrMessage({ text: textMessage, anim: 'fadeIn' });
-
-		if (timerMessage.current) clearTimeout(timerMessage.current);
-		timerMessage.current = setTimeout(() => {
-			setErrMessage({ text: textMessage, anim: 'fadeOut' });
-		}, timeout);
-	}
-
 	function SignIn(isFogotPassword = false) {
 		if (!isValidation()) return;
 
@@ -77,14 +68,17 @@ export default function SignInScreen({ navigation }) {
 				}
 
 				if (dataObg.password === password.current.value) {
-					SetData('USER_LOGIN_CHECK', {
+					let newUserData = {
 						fullName: dataObg.fullName,
 						email: email.current.value,
 						password: password.current.value,
-					}).then(() => {
+						isLoggedIn: true,
+					};
+					SetData('USER_LOGIN_CHECK', newUserData).then(() => {
 						setActive(false);
 						viewMessage('Успешно загружено!', 2500);
-						/* Переходо на другую страницу (задержка перехода идет от FirstEntryNavigator в 2с) */
+						/* Переходо на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
+						UserData.setUserData(newUserData);
 						UserData.setIsRegistration(true);
 					});
 				} else {
@@ -105,6 +99,15 @@ export default function SignInScreen({ navigation }) {
 		setActive(true);
 	}
 
+	function viewMessage(textMessage, timeout) {
+		setErrMessage({ text: textMessage, anim: 'fadeIn' });
+
+		if (timerMessage.current) clearTimeout(timerMessage.current);
+		timerMessage.current = setTimeout(() => {
+			setErrMessage({ text: textMessage, anim: 'fadeOut' });
+		}, timeout);
+	}
+	
 	return (
 		<ScrollView>
 			<View
@@ -113,7 +116,7 @@ export default function SignInScreen({ navigation }) {
 					stylesWelcome.mainFlex,
 				]}
 			>
-				{<ActivityIndicatorApp isActive={isLoad} />}
+				<ActivityIndicatorApp isActive={isLoad} />
 				<HederWelcome />
 				<Text style={stylesWelcome.titleText}>С возвращением!</Text>
 				<SignInImg style={styles.image} />

@@ -18,7 +18,7 @@ import {
 	EmailValidation,
 	PasswordsValidation,
 } from '../../utils/Validations';
-import { SetData } from '../../utils/AsyncStorage';
+import { SetData, GetData } from '../../utils/AsyncStorage';
 import { UserData } from '../../store';
 
 export default function SignUpScreen({ navigation }) {
@@ -44,7 +44,7 @@ export default function SignUpScreen({ navigation }) {
 		fieldName: 'Повтор пароля',
 	});
 
-	function Validation() {
+	function isValidation() {
 		try {
 			const formValues = [fullName, email, password, passwordConfirm];
 
@@ -65,33 +65,54 @@ export default function SignUpScreen({ navigation }) {
 			if (!passwordValid.isValidation) {
 				throw passwordValid.messErr;
 			}
+			return true;
 		} catch (e) {
 			viewMessage(e.message, 3000);
-			return;
+			return false;
 		}
+	}
+	
+	function SignUp() {
+		if (!isValidation()) return;
 
 		setIsLoad(true);
-		setActive(false);
-		try {
-			SetData(email.current.value, {
-				fullName: fullName.current.value,
-				password: password.current.value,
+		GetData(email.current.value)
+			.then(dataJson => {
+				dataObg = JSON.parse(dataJson);
+				console.log(dataObg);
+				viewMessage(
+					`Пользователь ${email.current.value} уже есть!`,
+					3000,
+				);
+				setIsLoad(false);
+			})
+			.catch(() => {
+				//если нет таких данных в базе
+				setActive(false);
+				let newUserData = {
+					fullName: fullName.current.value,
+					email: email.current.value,
+					password: password.current.value,
+					isLoggedIn: true,
+				};
+				try {
+					SetData(email.current.value, {
+						fullName: fullName.current.value,
+						password: password.current.value,
+					});
+					SetData('USER_LOGIN_CHECK', newUserData);
+				} catch (error) {
+					console.log(error);
+					viewMessage('Ошибка загрузки!', 3000);
+					setIsLoad(false);
+					setActive(true);
+					return;
+				}
+				viewMessage('Успешно загружено!', 2500);
+				/* Переходо на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
+				UserData.setUserData(newUserData);
+				UserData.setIsRegistration(true);
 			});
-			SetData('USER_LOGIN_CHECK', {
-				fullName: fullName.current.value,
-				email: email.current.value,
-				password: password.current.value,
-			});
-		} catch (error) {
-			console.log(error);
-			viewMessage('Ошибка загрузки!', 3000);
-			setIsLoad(false);
-			setActive(true);
-			return;
-		}
-		viewMessage('Успешно загружено!', 2500);
-		/* Переходо на другую страницу (задержка перехода идет от FirstEntryNavigator в 2с) */
-		UserData.setIsRegistration(true);
 	}
 
 	function viewMessage(textMessage, timeout) {
@@ -182,7 +203,7 @@ export default function SignUpScreen({ navigation }) {
 						}}
 						// value={password.current.value}
 						editable={active}
-						onSubmitEditing={Validation}
+						onSubmitEditing={SignUp}
 						placeholder='Ваш пароль'
 						inputMode='text'
 						placeholderTextColor={'gray'}
@@ -202,7 +223,7 @@ export default function SignUpScreen({ navigation }) {
 						}}
 						// value={passwordConfirm.current.value}
 						editable={active}
-						onSubmitEditing={Validation}
+						onSubmitEditing={SignUp}
 						placeholder='Подтверждение пароля'
 						inputMode='text'
 						placeholderTextColor={'gray'}
@@ -218,7 +239,7 @@ export default function SignUpScreen({ navigation }) {
 				>
 					<TouchableOpacity
 						disabled={!active}
-						onPress={Validation}
+						onPress={SignUp}
 						style={[stylesWelcome.btnNext, glogalStyles.shadow]}
 					>
 						<Text

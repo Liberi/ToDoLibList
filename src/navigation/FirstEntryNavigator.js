@@ -12,7 +12,7 @@ export default observer(function FirstEntryNavigator() {
 	useEffect(() => {
 		isGetData();
 		UserData.getUserData();
-	}, [UserData._isRegistration]);
+	}, [UserData.getIsRegistration]);
 
 	function isGetData() {
 		setTimeout(() => {
@@ -28,7 +28,7 @@ export default observer(function FirstEntryNavigator() {
 			else {
 				isGetData();
 			}
-		}, 2000);
+		}, 1000);
 	}
 
 	return (

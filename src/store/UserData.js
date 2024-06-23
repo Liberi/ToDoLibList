@@ -15,7 +15,14 @@ class UserData {
 	}
 
 	setIsRegistration(isNewRegistration){
+		/* if(!isNewRegistration){
+			this._data = null;
+		} */
 		this._isRegistration = isNewRegistration;
+	}
+
+	setUserData(newData){
+		this._data = newData;
 	}
 
 	getUserData() {
@@ -24,7 +31,7 @@ class UserData {
 				.then(dataJson => {
 					dataObg = JSON.parse(dataJson);
 
-					this.setIsRegistration(true);
+					this.setIsRegistration(dataObg.isLoggedIn);
 					this._data = dataObg;
 					return dataObg;
 				})

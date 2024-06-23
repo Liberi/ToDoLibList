@@ -21,8 +21,8 @@ export default StyleSheet.create({
 	},
 	logOutBtn: {
 		position: 'absolute',
-		top: '20%',
-		right: '8%',
+		top: '25%',
+		right: '10%',
 		width: 25,
 		height: 25,
 	},
@@ -79,7 +79,7 @@ export default StyleSheet.create({
 	},
 	loginOutMenuContainer: {
 		width: '70%',
-		height: '25%',
+		height: '30%',
 		padding: '5%',
 		backgroundColor: colors.appYellow,
 		borderRadius: 10,
@@ -87,13 +87,22 @@ export default StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 	loginOutTextAkkInfo: {
+		color: 'black',
 		textAlign: 'center',
 		fontWeight: 'bold',
 	},
-	loginOutCheckbox: {
-		
+	loginOutCheckboxContainer:{
+		flexDirection: 'row',
+		justifyContent: 'center',
+	},
+	loginOutCheckboxText: {
+		alignSelf: 'center',
+		fontSize: 14,
+		color: colors.appBackGray,
+		fontWeight: 'bold',
 	},
 	loginOutBtn: {
+		padding: '3%',
 		width: '100%',
 		backgroundColor: colors.appBackGray,
 		borderRadius: 10,
@@ -101,8 +110,10 @@ export default StyleSheet.create({
 	},
 	loginOutBtnText: {
 		fontSize: 20,
-		padding: '3%',
 		fontWeight: 'bold',
 		color: 'black',
+	},
+	loginOutTextNoActive: {
+		color: 'gray',
 	},
 });

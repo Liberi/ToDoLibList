@@ -5,7 +5,7 @@ import React from 'react';
 
 import { colors } from '../../styles';
 
-const ActivityIndicatorApp = ({ isActive }) => {
+const ActivityIndicatorApp = ({ isActive, colorReverse = false }) => {
 	return (
 		<Animatable.View
 			style={[
@@ -16,9 +16,9 @@ const ActivityIndicatorApp = ({ isActive }) => {
 			duration={500}
 		>
 			<ActivityIndicator
-				style={styles.indicator}
+				style={[styles.indicator, {backgroundColor: colorReverse ? colors.appBackGray : colors.appYellow}]}
 				size={'large'}
-				color={colors.appBackGray}
+				color={colorReverse ? colors.appYellow : colors.appBackGray}
 			/>
 		</Animatable.View>
 	);
@@ -31,11 +31,11 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'center',
+		width: '100%',
 		top: 50,
-		zIndex: 1,
+		zIndex: 10,
 	},
 	indicator: {
-		backgroundColor: colors.appYellow,
 		borderRadius: 20,
 	},
 });
