@@ -1,6 +1,5 @@
 import { Button, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import CheckBox from '@react-native-community/checkbox';
 import FastImage from 'react-native-fast-image';
 import { observer } from 'mobx-react-lite';
 import axios from 'axios';
@@ -8,21 +7,20 @@ import axios from 'axios';
 import { GIPHY_API_KEY } from '@env';
 
 import styles from './styles';
-import { colors, glogalStyles } from '../../styles';
+import { colors, globalStyles } from '../../styles';
 import { IconHeder } from '../../assets/svg';
 import { LogOut } from '../../assets/svg';
 
 import { UserData } from '../../store';
 import { LoadingIcon, ActivityIndicatorApp } from '../../components';
-import { SetData, RemoveData } from '../../utils/AsyncStorage';
+import LoginOutMenu from './LoginOutMenu';
+import TimerScreen from './TimerScreen';
 
-export default observer(function ToDoListScreen() {
+const ToDoListScreen = () => {
 	const [isLoginOutMenu, setIsLoginOutMenu] = useState(null);
 	const [useData, setUserData] = useState(null);
 	const [gifData, setGifData] = useState(null);
-	const [isChecked, setIsChecked] = useState(false);
 	const [isLoad, setIsLoad] = useState(false);
-	const [isDisableDialog, setIsDisableDialog] = useState(false);
 
 	useEffect(() => {
 		setUserData(UserData.getUserData());
@@ -62,123 +60,16 @@ export default observer(function ToDoListScreen() {
 		return gifTitle;
 	}
 
-	function updateDataLoginOut(isDeteteAkk) {
-		setIsLoad(true);
-		setIsDisableDialog(true);
-		if (isDeteteAkk) {
-			try {
-				RemoveData(useData.email).then(() => {
-					RemoveData('USER_LOGIN_CHECK').then(() => {
-						/* Переходо на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
-						UserData.setUserData(null);
-						UserData.setIsRegistration(false);
-					});
-				});
-			} catch (error) {
-				console.log('Прехвачена ошибка при удалении данных:', error);
-				setIsLoad(false);
-				setIsDisableDialog(false);
-			}
-		} else {
-			let newUserData = {
-				fullName: useData.fullName,
-				email: useData.email,
-				password: useData.password,
-				isLoggedIn: false,
-			};
-			SetData('USER_LOGIN_CHECK', newUserData).then(() => {
-				/* Переходо на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
-				UserData.setUserData(newUserData);
-				UserData.setIsRegistration(false);
-			});
-		}
-	}
-
-	function LoginOutMenu() {
-		return (
-			<View style={styles.loginOutMenuBack}>
-				<View
-					style={[styles.loginOutMenuContainer, glogalStyles.shadow]}
-				>
-					<Text
-						style={styles.loginOutTextAkkInfo}
-					>{`Вы выходите из аккаунта\n${useData?.email}`}</Text>
-					<View style={styles.loginOutCheckboxContainer}>
-						<CheckBox
-							disabled={isDisableDialog}
-							value={isChecked}
-							onValueChange={checked => setIsChecked(checked)}
-							tintColors={{
-								true: isDisableDialog
-									? 'gray'
-									: colors.appBackGray,
-								false: isDisableDialog
-									? 'gray'
-									: colors.appBackGray,
-							}}
-						/>
-						<Text
-							onPress={() => {
-								setIsChecked(!isChecked);
-							}}
-							style={[
-								styles.loginOutCheckboxText,
-								isDisableDialog
-									? styles.loginOutTextNoActive
-									: null,
-							]}
-						>
-							Удалить аккаунт
-						</Text>
-					</View>
-					<TouchableOpacity
-						disabled={isDisableDialog}
-						onPress={() => {
-							updateDataLoginOut(isChecked);
-						}}
-						activeOpacity={0.5}
-						style={[styles.loginOutBtn, glogalStyles.shadow]}
-					>
-						<Text
-							style={[
-								styles.loginOutBtnText,
-								isDisableDialog
-									? styles.loginOutTextNoActive
-									: null,
-							]}
-						>
-							Выйти
-						</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						disabled={isDisableDialog}
-						onPress={() => {
-							setIsLoginOutMenu(false);
-						}}
-						activeOpacity={0.5}
-						style={[styles.loginOutBtn, glogalStyles.shadow]}
-					>
-						<Text
-							style={[
-								styles.loginOutBtnText,
-								isDisableDialog
-									? styles.loginOutTextNoActive
-									: null,
-							]}
-						>
-							Отменить
-						</Text>
-					</TouchableOpacity>
-				</View>
-			</View>
-		);
-	}
-
 	return (
 		<View style={styles.mainContainer}>
 			<ActivityIndicatorApp isActive={isLoad} colorReverse={true} />
-			{!isLoginOutMenu || LoginOutMenu()}
-			<View style={[styles.hederContainer, glogalStyles.shadow]}>
+			<LoginOutMenu
+				isLoginOutMenu={isLoginOutMenu}
+				setIsLoginOutMenu={setIsLoginOutMenu}
+				useData={useData}
+				setIsLoad={setIsLoad}
+			/>
+			<View style={[styles.hederContainer, globalStyles.shadow]}>
 				<IconHeder style={styles.decorateHederImg} color={'#fff'} />
 				<TouchableOpacity
 					onPress={() => {
@@ -218,13 +109,16 @@ export default observer(function ToDoListScreen() {
 					</Text>
 				</View>
 			</View>
-			<Text style={[styles.HederText, { margin: '20%' }]}>
+			<TimerScreen />
+			{/* <Text style={[styles.HederText, { margin: '20%' }]}>
 				{`Тут что-то намечается...\n
 				 ${useData?.fullName}
 				 ${useData?.email}
 				 ${useData?.password}
 				`}
-			</Text>
+			</Text> */}
 		</View>
 	);
-});
+};
+
+export default observer(ToDoListScreen);

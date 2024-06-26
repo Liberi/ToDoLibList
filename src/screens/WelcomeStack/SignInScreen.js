@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import stylesWelcome from './styles';
-import { glogalStyles } from '../../styles';
+import { globalStyles } from '../../styles';
 import { SignInImg } from '../../assets/back';
 
 import { ActivityIndicatorApp, HederWelcome } from '../../components';
@@ -77,7 +77,7 @@ export default function SignInScreen({ navigation }) {
 					SetData('USER_LOGIN_CHECK', newUserData).then(() => {
 						setActive(false);
 						viewMessage('Успешно загружено!', 2500);
-						/* Переходо на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
+						/* Переход на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
 						UserData.setUserData(newUserData);
 						UserData.setIsRegistration(true);
 					});
@@ -191,7 +191,7 @@ export default function SignInScreen({ navigation }) {
 						onPress={() => {
 							SignIn();
 						}}
-						style={[stylesWelcome.btnNext, glogalStyles.shadow]}
+						style={[stylesWelcome.btnNext, globalStyles.shadow]}
 					>
 						<Text
 							style={[
@@ -203,7 +203,7 @@ export default function SignInScreen({ navigation }) {
 							Войти
 						</Text>
 					</TouchableOpacity>
-					<View style={[styles.containerElseText, glogalStyles.flex]}>
+					<View style={[styles.containerElseText, globalStyles.flex]}>
 						<Text style={stylesWelcome.titleElseText}>
 							Нет аккаунта?
 						</Text>

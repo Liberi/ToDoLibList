@@ -4,7 +4,7 @@ import { GetData } from '../utils/AsyncStorage';
 
 class UserData {
 	_isRegistration = false;
-	_data = null; /* data.fullName	data.email	data.password */
+	_data = null; /* data.fullName	data.email	data.password	data.isLoggedIn */
 
 	constructor() {
 		makeAutoObservable(this);
