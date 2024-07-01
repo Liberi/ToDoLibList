@@ -3,21 +3,28 @@ import { StyleSheet } from 'react-native';
 import { colors } from '../../styles';
 
 export default StyleSheet.create({
+	containerGestureHandlerRootView: {
+		// flex: 1,
+		// backgroundColor: 'white',
+	},
+	mainScrollContainer: {
+		backgroundColor: 'white',
+	},
 	mainContainer: {
-		flex: 1,
-		backgroundColor: colors.appBackGray,
+		backgroundColor: 'white',
+		paddingBottom: 20,
 	},
 	hederContainer: {
-		padding: '10%',
-		height: '35%',
+		padding: '5%',
 		backgroundColor: colors.appYellow,
 		alignItems: 'center',
+		justifyContent: 'flex-end',
 	},
 	decorateHederImg: {
 		width: '50%',
 		height: '40%',
 		position: 'absolute',
-		left: -20,
+		zIndex: 1,
 	},
 	logOutBtn: {
 		position: 'absolute',
@@ -27,7 +34,6 @@ export default StyleSheet.create({
 		height: 25,
 	},
 	containerUserImg: {
-		marginTop: '10%',
 		width: 90,
 		height: 90,
 		borderRadius: 50,
@@ -52,7 +58,7 @@ export default StyleSheet.create({
 	},
 	containerTextHeder: {
 		marginTop: 15,
-		width: '100%',
+		width: '80%',
 		alignItems: 'center',
 	},
 	HederText: {

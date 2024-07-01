@@ -1,15 +1,21 @@
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
+import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 
 import styles from './styles';
 import { colors, globalStyles } from '../../../styles';
 
-import { UserData } from '../../../store';
+import { UserData, UserTasksList, SettingsApp } from '../../../store';
 import { SetData, RemoveData } from '../../../utils/AsyncStorage';
 
-const LoginOutMenu = ({ isLoginOutMenu, setIsLoginOutMenu, useData, setIsLoad }) => {
-    const [isDisableDialog, setIsDisableDialog] = useState(false);
+const LoginOutMenu = ({
+	isLoginOutMenu,
+	setIsLoginOutMenu,
+	useData,
+	setIsLoad,
+}) => {
+	const [isDisableDialog, setIsDisableDialog] = useState(false);
 	const [isChecked, setIsChecked] = useState(false);
 
 	function updateDataLoginOut(isDeteteAkk) {
@@ -22,6 +28,8 @@ const LoginOutMenu = ({ isLoginOutMenu, setIsLoginOutMenu, useData, setIsLoad })
 						/* Переход на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
 						UserData.setUserData(null);
 						UserData.setIsRegistration(false);
+						UserTasksList.setCurrenJobNumberFocus(-1);
+						UserTasksList.updateDataList(null);
 					});
 				});
 			} catch (error) {
@@ -40,6 +48,8 @@ const LoginOutMenu = ({ isLoginOutMenu, setIsLoginOutMenu, useData, setIsLoad })
 				/* Переход на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
 				UserData.setUserData(newUserData);
 				UserData.setIsRegistration(false);
+				UserTasksList.setCurrenJobNumberFocus(-1);
+				UserTasksList.updateDataList(null);
 			});
 		}
 	}
@@ -65,6 +75,17 @@ const LoginOutMenu = ({ isLoginOutMenu, setIsLoginOutMenu, useData, setIsLoad })
 						style={[
 							styles.loginOutMenuContainer,
 							globalStyles.shadow,
+							{
+								width: SettingsApp.getIsPortraitScreen
+									? '70%'
+									: '35%',
+								height: SettingsApp.getIsPortraitScreen
+									? '30%'
+									: '70%',
+								padding: SettingsApp.getIsPortraitScreen
+									? '5%'
+									: '3%',
+							},
 						]}
 					>
 						<Text
@@ -141,6 +162,6 @@ const LoginOutMenu = ({ isLoginOutMenu, setIsLoginOutMenu, useData, setIsLoad })
 			</Modal>
 		</View>
 	);
-}
+};
 
-export default LoginOutMenu;
+export default observer(LoginOutMenu);

@@ -11,7 +11,7 @@ import {
 import stylesWelcome from './styles';
 import { globalStyles } from '../../styles';
 
-import { TextFadeAnim } from '../../components/TextErrors';
+import TextErr from '../../components/TextErrors';
 import { ActivityIndicatorApp, HederWelcome } from '../../components';
 import {
 	ValidationIsNull,
@@ -19,7 +19,7 @@ import {
 	PasswordsValidation,
 } from '../../utils/Validations';
 import { SetData, GetData } from '../../utils/AsyncStorage';
-import { UserData } from '../../store';
+import { UserData, SettingsApp } from '../../store';
 
 export default function SignUpScreen({ navigation }) {
 	const [errMessage, setErrMessage] = useState({ text: '', anim: 'fadeOut' });
@@ -99,6 +99,7 @@ export default function SignUpScreen({ navigation }) {
 					SetData(email.current.value, {
 						fullName: fullName.current.value,
 						password: password.current.value,
+						tasksData: null,
 					});
 					SetData('USER_LOGIN_CHECK', newUserData);
 				} catch (error) {
@@ -125,11 +126,17 @@ export default function SignUpScreen({ navigation }) {
 	}
 
 	return (
-		<ScrollView>
+		<ScrollView style={stylesWelcome.scrollContainer}>
 			<View
 				style={[
 					stylesWelcome.mainContainerWelcome,
 					stylesWelcome.mainFlex,
+					SettingsApp.getIsPortraitScreen
+							? { minHeight: SettingsApp.getScreenSize.height }
+							: {
+									height:
+										SettingsApp.getScreenSize.height * 2,
+							  },
 				]}
 			>
 				{<ActivityIndicatorApp isActive={isLoad} />}
@@ -143,7 +150,7 @@ export default function SignUpScreen({ navigation }) {
 					</Text>
 				</View>
 				<View style={stylesWelcome.textInputContainer}>
-					<TextFadeAnim
+					<TextErr
 						text={errMessage.text}
 						textColor={
 							!errMessage.text.includes('Успешно')
@@ -252,7 +259,7 @@ export default function SignUpScreen({ navigation }) {
 							Зарегестрироваться
 						</Text>
 					</TouchableOpacity>
-					<View style={[styles.containerElseText, globalStyles.flex]}>
+					<View style={globalStyles.flex}>
 						<Text style={stylesWelcome.titleElseText}>
 							Есть аккаут?
 						</Text>

@@ -1,14 +1,12 @@
 import { StyleSheet } from 'react-native';
 
-import { colors } from '../../../styles';
-
 export default StyleSheet.create({
 	timerContainer:{
 		alignItems: 'center',
 		justifyContent: 'center',
 		flexDirection: 'row',
 		width: '100%',
-		height: 150,
+		height: 130,
 	},
 	numberContainer: {
 		width: 75,
@@ -26,6 +24,7 @@ export default StyleSheet.create({
 		textAlign: 'center',
 	},
 	pointsTimer: {
+		textAlign: 'center',
 		margin: '2%',
 		width: '5%',
 		height: 80,

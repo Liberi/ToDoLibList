@@ -1,18 +1,15 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { colors } from '../../styles';
-const minHeightScreen = Dimensions.get('screen').height;
 
 export default StyleSheet.create({
 	mainContainer: {
-		flex: 1,
 		zIndex: 1,
 		paddingBottom: 100,
-		backgroundColor: colors.appBackGray,
+		backgroundColor: 'white',
 		justifyContent: 'space-between',
 	},
 	loadContainer: {
-		height: minHeightScreen,
         width: '100%',
 		position: 'absolute',
 		zIndex: 2,

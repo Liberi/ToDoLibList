@@ -16,8 +16,6 @@ export default StyleSheet.create({
 		justifyContent: 'center',
 	},
 	loginOutMenuContainer: {
-		width: '70%',
-		height: '30%',
 		padding: '5%',
 		backgroundColor: colors.appYellow,
 		borderRadius: 10,

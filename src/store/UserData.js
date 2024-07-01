@@ -4,7 +4,7 @@ import { GetData } from '../utils/AsyncStorage';
 
 class UserData {
 	_isRegistration = false;
-	_data = null; /* data.fullName	data.email	data.password	data.isLoggedIn */
+	_dataUser = null; /* data.fullName	data.email	data.password	data.isLoggedIn */
 
 	constructor() {
 		makeAutoObservable(this);
@@ -14,35 +14,32 @@ class UserData {
 		return this._isRegistration;
 	}
 
-	setIsRegistration(isNewRegistration){
-		/* if(!isNewRegistration){
-			this._data = null;
-		} */
+	setIsRegistration(isNewRegistration) {
 		this._isRegistration = isNewRegistration;
 	}
 
-	setUserData(newData){
-		this._data = newData;
+	setUserData(newData) {
+		this._dataUser = newData;
 	}
 
 	getUserData() {
-		if (!this._data) {
+		if (!this._dataUser) {
 			GetData('USER_LOGIN_CHECK')
 				.then(dataJson => {
 					dataObg = JSON.parse(dataJson);
 
 					this.setIsRegistration(dataObg.isLoggedIn);
-					this._data = dataObg;
+					this._dataUser = dataObg;
 					return dataObg;
 				})
 				.catch(err => {
 					this.setIsRegistration(false);
-					this._data = null;
-					console.log('Ошибка при получении данных:', err);
+					this._dataUser = null;
+					console.log('Ошибка при получении данных [UserData]:', err);
 					return null;
 				});
 		}
-		return this._data;
+		return this._dataUser;
 	}
 }
 

@@ -8,7 +8,6 @@ export default StyleSheet.create({
 		justifyContent: 'center',
 	},
 	shadow: {
-		// borderWidth: 1,
 		borderColor: colors.transparentWhite,
 		shadowColor: 'black',
 		elevation: 8,

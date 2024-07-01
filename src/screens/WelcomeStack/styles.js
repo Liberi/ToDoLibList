@@ -1,14 +1,15 @@
 import { Dimensions, StyleSheet } from 'react-native';
 
 import { colors } from '../../styles';
-const minHeightScreen = Dimensions.get('screen').height;
 
 export default StyleSheet.create({
+	scrollContainer:{
+		// maxHeight: minHeightScreen,
+	},
 	mainContainerWelcome: {
 		height: '100%',
 		paddingBottom: 100,
 		backgroundColor: colors.appBackGray,
-		minHeight: minHeightScreen,
 	},
 	mainFlex: {
 		alignItems: 'center',
@@ -19,6 +20,7 @@ export default StyleSheet.create({
 		height: '15%',
 	},
 	btnNext: {
+		marginBottom: 20,
 		backgroundColor: colors.appYellow,
 		width: '80%',
 		height: 70,

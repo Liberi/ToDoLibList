@@ -1,6 +1,6 @@
 import { ImageBackground, Text, View } from 'react-native';
 import * as Animatable from 'react-native-animatable';
-import React, { Component, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 
 import styles from './styles';
@@ -24,7 +24,12 @@ const TimerScreen = () => {
 				style={globalStyles.shadow}
 				onAnimationEnd={() => {
 					if (updatePlayAnim && iterationCount !== 'infinite') {
-						updatePlayAnim(<Numbers num={updateNum} style={globalStyles.shadow}/>);
+						updatePlayAnim(
+							<Numbers
+								num={updateNum}
+								style={globalStyles.shadow}
+							/>,
+						);
 					}
 				}}
 			>
@@ -105,6 +110,7 @@ const TimerScreen = () => {
 			<NumberAnim
 				component={<Numbers num={Seconds} />}
 				// iterationCount={'infinite'}
+				// анимация начинается каждый раз заного и всего 1 раз для правильной сихронизации
 			/>
 		</View>
 	);

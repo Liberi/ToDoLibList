@@ -1,5 +1,9 @@
-import { Button, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import {
+	GestureHandlerRootView,
+	ScrollView as GestureScrollView,
+} from 'react-native-gesture-handler';
+import React, { useEffect, useState } from 'react';
 import FastImage from 'react-native-fast-image';
 import { observer } from 'mobx-react-lite';
 import axios from 'axios';
@@ -7,14 +11,15 @@ import axios from 'axios';
 import { GIPHY_API_KEY } from '@env';
 
 import styles from './styles';
-import { colors, globalStyles } from '../../styles';
+import { globalStyles } from '../../styles';
 import { IconHeder } from '../../assets/svg';
 import { LogOut } from '../../assets/svg';
 
-import { UserData } from '../../store';
+import { UserData, SettingsApp } from '../../store';
 import { LoadingIcon, ActivityIndicatorApp } from '../../components';
 import LoginOutMenu from './LoginOutMenu';
 import TimerScreen from './TimerScreen';
+import TasksList from './TasksList';
 
 const ToDoListScreen = () => {
 	const [isLoginOutMenu, setIsLoginOutMenu] = useState(null);
@@ -61,63 +66,84 @@ const ToDoListScreen = () => {
 	}
 
 	return (
-		<View style={styles.mainContainer}>
-			<ActivityIndicatorApp isActive={isLoad} colorReverse={true} />
-			<LoginOutMenu
-				isLoginOutMenu={isLoginOutMenu}
-				setIsLoginOutMenu={setIsLoginOutMenu}
-				useData={useData}
-				setIsLoad={setIsLoad}
-			/>
-			<View style={[styles.hederContainer, globalStyles.shadow]}>
-				<IconHeder style={styles.decorateHederImg} color={'#fff'} />
-				<TouchableOpacity
-					onPress={() => {
-						setIsLoginOutMenu(!isLoginOutMenu);
-					}}
-					style={styles.logOutBtn}
-				>
-					<LogOut style={{ flex: 1 }} />
-				</TouchableOpacity>
+		<GestureHandlerRootView style={styles.containerGestureHandlerRootView}>
+			<GestureScrollView style={styles.mainScrollContainer}>
 				<View
 					style={[
-						styles.containerUserImg,
-						!!gifData || styles.loadingImage,
+						styles.mainContainer,
+						SettingsApp.getIsPortraitScreen
+							? { minHeight: SettingsApp.getScreenSize.height }
+							: {
+									height:
+										SettingsApp.getScreenSize.height * 2.4,
+							  },
 					]}
 				>
-					{!!gifData && (
-						<FastImage
-							style={styles.UserImg}
-							source={{
-								uri: gifData.url,
-								priority: FastImage.priority.high,
+					<ActivityIndicatorApp
+						isActive={isLoad}
+						colorReverse={true}
+					/>
+					<LoginOutMenu
+						isLoginOutMenu={isLoginOutMenu}
+						setIsLoginOutMenu={setIsLoginOutMenu}
+						useData={useData}
+						setIsLoad={setIsLoad}
+					/>
+					<IconHeder style={styles.decorateHederImg} color={'#fff'} />
+					<View
+						style={[
+							styles.hederContainer,
+							globalStyles.shadow,
+							{
+								height: SettingsApp.getIsPortraitScreen
+									? '35%'
+									: '40%',
+							},
+						]}
+					>
+						<TouchableOpacity
+							onPress={() => {
+								setIsLoginOutMenu(!isLoginOutMenu);
 							}}
-							resizeMode={FastImage.resizeMode.cover}
-						/>
-					)}
-					<LoadingIcon altStyle={styles.loadingIcon} />
+							style={styles.logOutBtn}
+						>
+							<LogOut style={{ flex: 1 }} />
+						</TouchableOpacity>
+						<View
+							style={[
+								styles.containerUserImg,
+								!!gifData || styles.loadingImage,
+							]}
+						>
+							{!!gifData && (
+								<FastImage
+									style={styles.UserImg}
+									source={{
+										uri: gifData.url,
+										priority: FastImage.priority.high,
+									}}
+									resizeMode={FastImage.resizeMode.cover}
+								/>
+							)}
+							<LoadingIcon altStyle={styles.loadingIcon} />
+						</View>
+						<View style={styles.containerTextHeder}>
+							<Text style={styles.HederText}>
+								{`Приветствую ${useData?.fullName}!`}
+							</Text>
+							<Text style={styles.DescrptionText}>
+								{gifTitleSlice(gifData?.title)}
+							</Text>
+							<Text style={styles.DescrptionText}>
+								{'Ваша Gif сегодня ⬆️'}
+							</Text>
+						</View>
+					</View>
+					<TimerScreen />
+					<TasksList />
 				</View>
-				<View style={styles.containerTextHeder}>
-					<Text style={styles.HederText}>
-						{`Приветствую ${useData?.fullName}!`}
-					</Text>
-					<Text style={styles.DescrptionText}>
-						{gifTitleSlice(gifData?.title)}
-					</Text>
-					<Text style={styles.DescrptionText}>
-						{'Ваша Gif сегодня ⬆️'}
-					</Text>
-				</View>
-			</View>
-			<TimerScreen />
-			{/* <Text style={[styles.HederText, { margin: '20%' }]}>
-				{`Тут что-то намечается...\n
-				 ${useData?.fullName}
-				 ${useData?.email}
-				 ${useData?.password}
-				`}
-			</Text> */}
-		</View>
+			</GestureScrollView>
+		</GestureHandlerRootView>
 	);
 };
 
