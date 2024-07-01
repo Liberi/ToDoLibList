@@ -1,6 +1,6 @@
 {
   "name": "ToDoLibList",
-  "version": "1.0.1beta",
+  "version": "1.0.2-beta",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
