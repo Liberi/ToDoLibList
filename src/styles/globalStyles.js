@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from './colors';
 
 export default StyleSheet.create({
 	flex: {
@@ -7,6 +8,7 @@ export default StyleSheet.create({
 		justifyContent: 'center',
 	},
 	shadow: {
+		borderColor: colors.transparentWhite,
 		shadowColor: 'black',
 		elevation: 8,
 	},

@@ -9,15 +9,15 @@ import {
 } from 'react-native';
 
 import stylesWelcome from './styles';
-import { glogalStyles } from '../../styles';
+import { globalStyles } from '../../styles';
 import { SignInImg } from '../../assets/back';
 
 import { ActivityIndicatorApp, HederWelcome } from '../../components';
-import { TextFadeAnim } from '../../components/TextErrors';
+import TextErr from '../../components/TextErrors';
 
 import { ValidationIsNull, EmailValidation } from '../../utils/Validations';
 import { SetData, GetData } from '../../utils/AsyncStorage';
-import { UserData } from '../../store';
+import { UserData, SettingsApp } from '../../store';
 
 export default function SignInScreen({ navigation }) {
 	const [errMessage, setErrMessage] = useState({ text: '', anim: 'fadeOut' });
@@ -77,7 +77,7 @@ export default function SignInScreen({ navigation }) {
 					SetData('USER_LOGIN_CHECK', newUserData).then(() => {
 						setActive(false);
 						viewMessage('Успешно загружено!', 2500);
-						/* Переходо на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
+						/* Переход на другую страницу (задержка перехода идет от FirstEntryNavigator в 1с) */
 						UserData.setUserData(newUserData);
 						UserData.setIsRegistration(true);
 					});
@@ -96,7 +96,7 @@ export default function SignInScreen({ navigation }) {
 	function FogotPassword(password) {
 		viewMessage(`Успешно, ваш пароль: ${password}`, 10000);
 		setIsLoad(false);
-		setActive(true);
+		// setActive(true);
 	}
 
 	function viewMessage(textMessage, timeout) {
@@ -107,13 +107,19 @@ export default function SignInScreen({ navigation }) {
 			setErrMessage({ text: textMessage, anim: 'fadeOut' });
 		}, timeout);
 	}
-	
+
 	return (
-		<ScrollView>
+		<ScrollView style={stylesWelcome.scrollContainer}>
 			<View
 				style={[
 					stylesWelcome.mainContainerWelcome,
 					stylesWelcome.mainFlex,
+					SettingsApp.getIsPortraitScreen
+							? { minHeight: SettingsApp.getScreenSize.height }
+							: {
+									height:
+										SettingsApp.getScreenSize.height * 2,
+							  },
 				]}
 			>
 				<ActivityIndicatorApp isActive={isLoad} />
@@ -121,7 +127,7 @@ export default function SignInScreen({ navigation }) {
 				<Text style={stylesWelcome.titleText}>С возвращением!</Text>
 				<SignInImg style={styles.image} />
 				<View style={stylesWelcome.textInputContainer}>
-					<TextFadeAnim
+					<TextErr
 						text={errMessage.text}
 						textColor={
 							!errMessage.text.includes('Успешно')
@@ -191,19 +197,18 @@ export default function SignInScreen({ navigation }) {
 						onPress={() => {
 							SignIn();
 						}}
-						style={[stylesWelcome.btnNext, glogalStyles.shadow]}
+						style={[stylesWelcome.btnNext, globalStyles.shadow]}
 					>
 						<Text
 							style={[
 								stylesWelcome.btnText,
 								!active ? stylesWelcome.textNoActive : null,
 							]}
-							// style={stylesWelcome.btnText}
 						>
 							Войти
 						</Text>
 					</TouchableOpacity>
-					<View style={[styles.containerElseText, glogalStyles.flex]}>
+					<View style={globalStyles.flex}>
 						<Text style={stylesWelcome.titleElseText}>
 							Нет аккаунта?
 						</Text>
