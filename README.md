@@ -1,7 +1,7 @@
 > ![ic_launcher](https://github.com/Liberi/ToDoLibList/assets/130091860/1b2a1ed4-89c6-46a5-b860-0142288d6895)
 # Разработка проекта ToDoList для обучения 
 > [!NOTE]
-> Билд последней стабильной версии вы можете найти здесь [V1.0.8-Alpha](https://drive.google.com/drive/folders/17TYOmGtHnu6jxVOPb-xhnxVT_vvbrZel?usp=sharing)
+> Билд последней стабильной версии вы можете найти здесь [V1.0.2-Beta](https://drive.google.com/file/d/1evbyWQ2ijdlaHrpfOYDqLyy65HonUaQo/view?usp=sharing)
 
 Проект разрабатывается для обучения и наработки навыков (при этом я немного отхожу от основного макета). 
 Приложение в большей части разрабатывается под `Android 👾`
